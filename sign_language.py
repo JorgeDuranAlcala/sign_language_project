@@ -4,8 +4,10 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-model_dict = pickle.load(open('./model.p', 'rb'))
-model = model_dict['model']
+model_dict = pickle.load(open("./model.p", "rb"))
+model = model_dict["model"]
+
+
 def sign_language():
     cap = cv2.VideoCapture(0)
 
@@ -15,10 +17,10 @@ def sign_language():
 
     hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-    labels_dict = {0: 'Hello', 1: 'Dos', 2: 'Tres'}
+    labels_dict = {0: "A", 1: "B", 2: "C", 3: "D"}
 
-    cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('frame', 800, 600)
+    cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("frame", 800, 600)
 
     while True:
 
@@ -40,7 +42,8 @@ def sign_language():
                     hand_landmarks,  # model output
                     mp_hands.HAND_CONNECTIONS,  # hand connections
                     mp_drawing_styles.get_default_hand_landmarks_style(),
-                    mp_drawing_styles.get_default_hand_connections_style())
+                    mp_drawing_styles.get_default_hand_connections_style(),
+                )
 
             for hand_landmarks in results.multi_hand_landmarks:
                 for i in range(len(hand_landmarks.landmark)):
@@ -67,16 +70,31 @@ def sign_language():
             predicted_character = labels_dict[int(prediction[0])]
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-            cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
-                        cv2.LINE_AA)
+            cv2.putText(
+                frame,
+                predicted_character,
+                (x1, y1 - 10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1.3,
+                (0, 0, 0),
+                3,
+                cv2.LINE_AA,
+            )
 
-        cv2.putText(frame, 'Para terminar presiona la tecla "Q"! :)', (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 3,
-                    cv2.LINE_AA)
-        cv2.imshow('frame', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        cv2.putText(
+            frame,
+            'Para terminar presiona la tecla "Q"! :)',
+            (100, 50),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.9,
+            (0, 255, 0),
+            3,
+            cv2.LINE_AA,
+        )
+        cv2.imshow("frame", frame)
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
         cv2.waitKey(1)
 
     cap.release()
     cv2.destroyAllWindows()
-
