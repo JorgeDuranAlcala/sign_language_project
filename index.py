@@ -15,7 +15,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-labels_dict = {0: "A", 1: "B", 2: "C", 3: "D"}
+labels_dict = {0: "A", 1: "B", 2: "C"}
 while True:
 
     data_aux = []
@@ -59,6 +59,7 @@ while True:
         x2 = int(max(x_) * W) - 10
         y2 = int(max(y_) * H) - 10
 
+        data_aux = np.pad(data_aux, ((0, 0), (0, 42))) 
         prediction = model.predict([np.asarray(data_aux)])
 
         predicted_character = labels_dict[int(prediction[0])]
